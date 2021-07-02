@@ -22,9 +22,10 @@ This is a NodeJS application to create disappearing messages. App allows the use
 2) Navigate to the source folder - `cd src`
 3) Install dependencies - `npm i`
 4) Add environment variables - `.env`
-5) Run the app - `npm run start`
-6) To Run app in development mode - `npm run dev`
-7) Visit `localhost:2021` or `PORT` can be defined in the `.env` file.
+5) Import database from `src/database/anonymous.sql`
+6) Run the app - `npm run start`
+7) To Run app in development mode - `npm run dev`
+8) Visit `localhost:2021` or `PORT` can be defined in the `.env` file.
 
 ### API end-points
 1) `/` - loads the UI
