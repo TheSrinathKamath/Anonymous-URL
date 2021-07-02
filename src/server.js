@@ -42,6 +42,8 @@ app.get('/', (req, res) => {
 // Configuring routes for links
 const routes = require('./routes/index')
 app.use('/link', routes);
+
+// Configuring routes for rendering EJS
 app.get('/login', (req, res) => {
     res.render('login', { title: 'Login' })
 });
