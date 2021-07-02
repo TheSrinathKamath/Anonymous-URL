@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous URL | Create Disappearing Messages</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<%- include ("./partials/index-header.ejs") %>
+</head>
+
+<body>
+
+    <div class="smartphone">
+        <div class="content">
+            <div class="logo" id="logo">
+                <h2 style="margin: 0;"><b>ANON<span class="hidden-text">YMOUS</span></b></h2>
+            </div>
+            <div class="navbar" id="navbar">Create Disappearing Messages</div>
+            <div id="view-port" onscroll="scrollFunction()">
+            </div>
+        </div>
+        <form action="javascript:add();" autocomplete="off" id="message-form">
+            <div class="time" id="time-container">
+                <span class="btn-time" onclick="setDestructTime(1,'m')" id="btn-time-1">1 Min</span>
+                <span class="btn-time" onclick="setDestructTime(1,'h')" id="btn-time-2">1 Hour</span>
+                <span class="btn-time" onclick="setDestructTime(1,'d')" id="btn-time-3">1 Day</span>
+                <span class="btn-time" onclick="setDestructTime(1,'w')" id="btn-time-4">1 Week</span>
+                <span class="btn-time" onclick="setDestructTime(1,'n')" id="btn-time-5">1 Month</span>
+            </div>
+            <input class="text-inp" type="text" placeholder="Your secret here..." id="inp-message" autofocus required>
+            <button class="btn-send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+        </form>
+    </div>
+    <div class="footer">
+        <%- include("./partials/footer.ejs") %>
+    </div>
+
+</body>
+
+<script>
+    $(document).ready(function () {
+        $("#inp-message").focusin(function () {
+            $('#time-container').fadeIn().show();
+        });
+        $("#inp-message").focusout(function () {
+            $('#time-container').fadeOut();
+        });
+    });
+    var lastScrollTop = 0;
+
+    function scrollFunction() {
+        var scrollPos = $('#view-port').scrollTop();
+        if (scrollPos > lastScrollTop) {
+            // downscroll code
+            $('#navbar').fadeOut();
+            $('#logo').css({
+                "border-bottom": "1px solid",
+                "fontSize": "12px"
+            });
+        } else {
+            // upscroll code
+            $('#navbar').fadeIn();
+            $('#logo').css({
+                "border-bottom": "none"
+            });
+        }
+        if (scrollPos == 0) {
+            $('#logo').css({
+                "border-bottom": "none",
+                "fontSize": "22px"
+            })
+        }
+        lastScrollTop = scrollPos;
+    }
+
+    function copyToClipboard(data) {
+        navigator.clipboard.writeText(data).then(
+            () => console.log('copied'),
+            function () {
+                alert('Failure to copy. Check permissions for clipboard')
+            });
+    }
+</script>
+<script>
+    var destructTime = 60; // destruct time is calculated in seconds and is set to 60s by default
+
+    function setDestructTime(interval, type) {
+        if (type == 's') destructTime = interval;
+        else if (type == 'm') destructTime = interval * 60;
+        else if (type == 'h') destructTime = interval * 60 * 60;
+        else if (type == 'd') destructTime = interval * 60 * 60 * 24;
+        else if (type == 'n') destructTime = interval * 2629746;
+        else destructTime = 60;
+    }
+
+    function getDestructInterval() {
+        return destructTime;
+    }
+
+    function formatDate(date) {
+        const _date = new Date(date);
+        const day = _date.getDate();
+        const month = _date.getMonth() + 1;
+        const year = _date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    function add() {
+        const interval = getDestructInterval();
+        if (!interval) return alert('Please select a timeout!');
+
+        let message = document.getElementById('inp-message').value;
+        document.getElementById('message-form').reset();
+
+        var messageContainer = document.createElement("div"); // Create a container for message bubble
+        var messageBubble = document.createElement("div"); // Create a message bubble
+        var dateTimeWrapper = document.createElement("span"); // Create a message bubble
+        var textnode = document.createTextNode(message); // Create a text node
+        // var sendDate = document.createTextNode(formatDate(new Date()));
+
+        messageBubble.appendChild(textnode); // Append the text message bubble
+        messageBubble.classList.add('right-message-bubble');
+
+        // // dateTimeWrapper.appendChild(sendDate); // Append the text message bubble
+        messageContainer.appendChild(messageBubble); // Append the text to message bubble
+        // messageContainer.appendChild(dateTimeWrapper); // Append the text to message bubble
+        messageContainer.classList.add('message-container');
+
+        document.getElementById("view-port").appendChild(messageContainer);
+
+        getLink(1, message, interval);
+
+        updateScroll();
+    }
+
+    function reply(data) {
+        var messageContainer = document.createElement("div"); // Create a container for message bubble
+        var messageBubble = document.createElement("div"); // Create a message bubble
+        var textnode = document.createTextNode("URL created. Copy to view."); // Create a text node
+        var secretURL = document.createElement('a');
+        var btnCopyToClipboard = document.createElement('button');
+
+        secretURL.appendChild(textnode)
+        secretURL.title = "Secret URL";
+        secretURL.href = data;
+        secretURL.target = "_blank";
+
+        btnCopyToClipboard.onclick = copyToClipboard(data);
+        btnCopyToClipboard.innerHTML = '<i class="fa fa-clipboard" aria-hidden="true"></i>';
+        btnCopyToClipboard.classList.add('btn-copy');
+
+        messageBubble.appendChild(secretURL); // Append the text message bubble
+        messageBubble.appendChild(btnCopyToClipboard); // Append the text message bubble
+        messageBubble.classList.add('left-message-bubble');
+
+        messageContainer.appendChild(messageBubble); // Append the text to message bubble
+        messageContainer.classList.add('message-container');
+
+        document.getElementById("view-port").appendChild(messageContainer);
+
+        updateScroll();
+    }
+
+    function getLink(userId, message, interval) {
+        $.ajax({
+            url: 'http://127.0.0.1:1306/link/create',
+            data: {
+                "_id": userId,
+                "message": message,
+                "interval": interval
+            },
+            method: "POST",
+            success: (data) => {
+                reply(data.result)
+            },
+            error: () => {
+                reply('Oops, an error occured!')
+            }
+        })
+    }
+
+    function updateScroll() {
+        var element = document.getElementById("view-port");
+        element.scrollTop = element.scrollHeight;
+    }
+</script>
+
+</html>
