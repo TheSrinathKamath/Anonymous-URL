@@ -1,4 +1,4 @@
-# surveySparrowTest
+# AnonymousURL
 This is an Angular application for Survey Sparrow Machine test
 
 ## Anonymous URL - Create disappearing messages
