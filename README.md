@@ -15,7 +15,7 @@ This is a NodeJS application to create disappearing messages. App allows the use
 </div>
 
 ### Project setup
-1) Clone the repository - `git clone https://github.com/TheSrinathKamath/surveySparrowTest.git`
+1) Clone the repository - `git clone https://github.com/TheSrinathKamath/Anonymous-URL.git`
 2) Navigate to the source folder - `cd src`
 3) Install dependencies - `npm i`
 4) Add environment variables - `.env`
