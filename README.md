@@ -1,7 +1,4 @@
-# AnonymousURL
-This is an Angular application for Survey Sparrow Machine test
-
-## Anonymous URL - Create disappearing messages
+# Anonymous URL - Create disappearing messages
 
 ### Project description
 This is a NodeJS application to create disappearing messages. App allows the user to generate temporary URLs to share self-desctructing messages after a given time interval.
